@@ -1,0 +1,31 @@
+{
+    "agent_id": "concierge-orchestrator",
+    "name": "Concierge Agent",
+    "version": "1.0.0",
+    "description": "Central orchestrator for private credit origination. Discovers agents, routes workflows, and generates Credit Committee summaries.",
+    "base_url": "http://localhost:8000",
+    "capabilities": [
+        {
+            "name": "process_application",
+            "method": "POST",
+            "path": "/process",
+            "description": "End-to-end loan origination: onboard borrower → structure loan → credit intelligence → report"
+        },
+        {
+            "name": "rag_query",
+            "method": "GET",
+            "path": "/query",
+            "description": "Semantic search over credit intelligence RAG store"
+        },
+        {
+            "name": "list_agents",
+            "method": "GET",
+            "path": "/agents",
+            "description": "Discover and list all registered agent capabilities"
+        }
+    ],
+    "auth": {
+        "type": "api_key",
+        "header": "x-api-key"
+    }
+}

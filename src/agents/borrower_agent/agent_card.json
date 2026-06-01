@@ -1,0 +1,27 @@
+{
+    "agent_id": "borrower-onboarding-agent",
+    "name": "Borrower Onboarding Agent",
+    "version": "1.0.0",
+    "description": "Collects, validates, and persists borrower KYC and financial data for private credit origination.",
+    "base_url": "http://localhost:8001",
+    "capabilities": [
+        {
+            "name": "onboard_borrower",
+            "method": "POST",
+            "path": "/borrowers",
+            "description": "Create and validate a new borrower record",
+            "input_schema": "BorrowerCreate",
+            "output_schema": "BorrowerOut"
+        },
+        {
+            "name": "get_borrower",
+            "method": "GET",
+            "path": "/borrowers/{borrower_id}",
+            "description": "Fetch existing borrower by ID"
+        }
+    ],
+    "auth": {
+        "type": "api_key",
+        "header": "x-api-key"
+    }
+}

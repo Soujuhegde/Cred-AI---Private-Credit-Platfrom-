@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+  borrower-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+      args:
+        AGENT: borrower_agent
+        PORT: 8001
+    ports: [ "8001:8001" ]
+    env_file: .env
+    environment:
+      BORROWER_DB_URL: sqlite:////data/borrower.db
+    volumes:
+      - borrower-data:/data
+
+  loan-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+      args:
+        AGENT: loan_agent
+        PORT: 8002
+    ports: [ "8002:8002" ]
+    env_file: .env
+    environment:
+      LOAN_DB_URL: sqlite:////data/loan.db
+    volumes:
+      - loan-data:/data
+
+  credit-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+      args:
+        AGENT: credit_intelligence_agent
+        PORT: 8003
+    ports: [ "8003:8003" ]
+    env_file: .env
+    environment:
+      CHROMA_PATH: /data/chroma_db
+    volumes:
+      - credit-data:/data
+
+  concierge-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+      args:
+        AGENT: concierge_agent
+        PORT: 8000
+    ports: [ "8000:8000" ]
+    env_file: .env
+    environment:
+      BORROWER_AGENT_URL: http://borrower-agent:8001
+      LOAN_AGENT_URL: http://loan-agent:8002
+      CREDIT_AGENT_URL: http://credit-agent:8003
+    depends_on:
+      - borrower-agent
+      - loan-agent
+      - credit-agent
+
+volumes:
+  borrower-data:
+  loan-data:
+  credit-data:

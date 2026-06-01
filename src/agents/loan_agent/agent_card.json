@@ -1,0 +1,25 @@
+{
+    "agent_id": "loan-application-agent",
+    "name": "Loan Application Agent",
+    "version": "1.0.0",
+    "description": "Structures private credit loan deals, evaluates LTV and debt-service ratios, and persists applications.",
+    "base_url": "http://localhost:8002",
+    "capabilities": [
+        {
+            "name": "create_loan",
+            "method": "POST",
+            "path": "/loans",
+            "description": "Structure and validate a loan application"
+        },
+        {
+            "name": "get_loan",
+            "method": "GET",
+            "path": "/loans/{loan_id}",
+            "description": "Fetch a loan application by ID"
+        }
+    ],
+    "auth": {
+        "type": "api_key",
+        "header": "x-api-key"
+    }
+}

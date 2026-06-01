@@ -1,0 +1,25 @@
+{
+    "agent_id": "credit-intelligence-agent",
+    "name": "Credit Intelligence Agent",
+    "version": "1.0.0",
+    "description": "Generates risk scores, default probabilities, and market insights. Embeds results into RAG for semantic retrieval.",
+    "base_url": "http://localhost:8003",
+    "capabilities": [
+        {
+            "name": "generate_intelligence",
+            "method": "POST",
+            "path": "/intelligence",
+            "description": "Generate credit intelligence for a borrower+loan pair"
+        },
+        {
+            "name": "rag_query",
+            "method": "GET",
+            "path": "/intelligence/query",
+            "description": "Semantic RAG search over stored credit intelligence"
+        }
+    ],
+    "auth": {
+        "type": "api_key",
+        "header": "x-api-key"
+    }
+}

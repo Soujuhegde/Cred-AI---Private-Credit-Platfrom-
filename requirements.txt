@@ -1,0 +1,43 @@
+# ── Web Framework ──────────────────────────────────────────────────────────────
+fastapi==0.115.0
+uvicorn[standard]==0.30.6        # ASGI server with websocket + reload support
+
+# ── Database ───────────────────────────────────────────────────────────────────
+sqlalchemy==2.0.35               # ORM + connection pooling
+alembic==1.13.2                  # DB migrations (for schema changes in prod)
+# psycopg2-binary==2.9.9           # PostgreSQL driver (swap SQLite → Postgres) - commented out for Python 3.14 compilation compatibility
+# aiosqlite==0.20.0              # Uncomment if using async SQLAlchemy with SQLite
+
+# ── Data Validation ────────────────────────────────────────────────────────────
+pydantic>=2.13.0
+pydantic-settings>=2.14.0         # For loading settings from .env files
+
+# ── HTTP Client (A2A inter-agent calls) ────────────────────────────────────────
+httpx==0.27.2                    # Async HTTP — used by A2AClient
+
+# ── Sarvam AI SDK ──────────────────────────────────────────────────────────────
+# sarvam-ai==0.1.0                 # Official Sarvam Python SDK (not on PyPI; using openai SDK drop-in)
+# Sarvam also exposes an OpenAI-compatible REST API,
+# so the openai SDK works too if you set base_url to Sarvam's endpoint.
+# See: https://docs.sarvam.ai/api-reference
+
+# ── Orchestration ──────────────────────────────────────────────────────────────
+langgraph==0.2.35                # LangGraph workflow / state machine
+langchain==0.3.3                 # LangChain core (used by LangGraph internally)
+langchain-community==0.3.2       # Community integrations
+
+# ── Vector DB / RAG ────────────────────────────────────────────────────────────
+chromadb==0.5.12                 # Local persistent vector store
+sentence-transformers==3.1.1     # Free local embeddings (replaces OpenAI embeds)
+# Alternative: use chromadb's default embedding if sentence-transformers is too heavy
+
+# ── Environment & Config ───────────────────────────────────────────────────────
+python-dotenv==1.0.1
+
+# ── Logging & Observability ────────────────────────────────────────────────────
+structlog==24.4.0                # Structured JSON logging
+
+# ── Testing ────────────────────────────────────────────────────────────────────
+pytest==8.3.3
+pytest-asyncio==0.23.8
+httpx==0.27.2                    # Also used in integration tests
