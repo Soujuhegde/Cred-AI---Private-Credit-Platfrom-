@@ -134,7 +134,61 @@ with st.form("loan_structuring_form"):
                 else:
                     st.session_state["summary"] = response_data
                     st.success("Evaluation complete! Credit Committee report generated.")
-                    st.json(response_data)
+                    
+                    # Display Visual Risk Envelope Maps
+                    loan_info = response_data.get("loan", {})
+                    ltv = loan_info.get("ltv_ratio")
+                    dsr = loan_info.get("debt_service_ratio")
+                    
+                    if ltv is not None and dsr is not None:
+                        # LTV variables
+                        ltv_pct = ltv * 100
+                        ltv_color = "#28A745" if ltv <= 0.75 else "#DC3545"
+                        ltv_desc = "✅ Collateral backing is safe (LTV is under the maximum 75% threshold)." if ltv <= 0.75 else "⚠️ Collateral backing is insufficient (LTV exceeds the 75% limit)."
+                        
+                        # DSR variables
+                        dsr_pct = dsr * 100
+                        if dsr <= 0.35:
+                            dsr_color = "#28A745" # Safe Green
+                            dsr_desc = "✅ Excellent debt coverage (Monthly payments are well below 35% of monthly income)."
+                        elif dsr <= 0.45:
+                            dsr_color = "#FFC107" # Warning Yellow
+                            dsr_desc = "⚠️ Moderate debt coverage (Payments are between 35% and 45% of income. Acceptable but tight)."
+                        else:
+                            dsr_color = "#DC3545" # Danger Red
+                            dsr_desc = "❌ High debt coverage warning (Payments exceed the maximum 45% DSR limit)."
+                            
+                        st.markdown(f"""
+                        <div style="background: #FAF3E6; border: 1px solid #C4B5A5; border-radius: 12px; padding: 20px; margin-top: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); font-family: 'Inter', sans-serif;">
+                            <h4 style="color: #5C3E21; margin-top: 0; border-bottom: 1px solid #C4B5A5; padding-bottom: 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                                📊 Real-time Risk Envelope Maps
+                            </h4>
+                            
+                            <!-- LTV Progress Bar -->
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #1A1816;">
+                                    <span>Loan-to-Value (LTV) Ratio</span>
+                                    <span style="color: {ltv_color};">{ltv_pct:.1f}% / 75.0% Max</span>
+                                </div>
+                                <div style="background: #E5DCD0; border-radius: 6px; height: 12px; width: 100%; margin-top: 8px; overflow: hidden; border: 1px solid #C4B5A5;">
+                                    <div style="background: {ltv_color}; height: 100%; width: {min(ltv_pct, 100.0)}%;"></div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: #555; margin-top: 6px;">{ltv_desc}</div>
+                            </div>
+                            
+                            <!-- DSR Progress Bar -->
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #1A1816;">
+                                    <span>Debt-Service Ratio (DSR)</span>
+                                    <span style="color: {dsr_color};">{dsr_pct:.1f}% / 45.0% Max</span>
+                                </div>
+                                <div style="background: #E5DCD0; border-radius: 6px; height: 12px; width: 100%; margin-top: 8px; overflow: hidden; border: 1px solid #C4B5A5;">
+                                    <div style="background: {dsr_color}; height: 100%; width: {min(dsr_pct, 100.0)}%;"></div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: #555; margin-top: 6px;">{dsr_desc}</div>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
 
 # Visual helper display (calls user component)
 st.write("---")
