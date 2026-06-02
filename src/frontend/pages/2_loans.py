@@ -35,9 +35,40 @@ api_key = st.session_state.get("api_key", "secret-internal-key")
 
 # Verify borrower profile is loaded
 if "borrower" not in st.session_state:
-    st.warning("⚠️ No active borrower profile loaded. Please onboard a borrower first.")
+    st.warning("⚠️ No active borrower profile loaded in this session.")
+    
+    # Quick-load selectbox from local DB
+    import sqlite3
+    try:
+        conn = sqlite3.connect("borrower.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT borrower_id, name FROM borrowers ORDER BY created_at DESC")
+        existing_borrowers = cursor.fetchall()
+        conn.close()
+        
+        if existing_borrowers:
+            st.markdown("### ⚡ Quick Load Existing Borrower")
+            options = ["-- Select a Borrower to Load --"] + [f"{name} ({bid})" for bid, name in existing_borrowers]
+            selected_option = st.selectbox("Select a borrower from the database to continue:", options=options)
+            if selected_option != "-- Select a Borrower to Load --":
+                selected_bid = selected_option.split("(")[-1].replace(")", "").strip()
+                # Fetch details from SQLite
+                conn = sqlite3.connect("borrower.db")
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM borrowers WHERE borrower_id = ?", (selected_bid,))
+                row = cursor.fetchone()
+                conn.close()
+                if row:
+                    st.session_state["borrower"] = dict(row)
+                    st.success(f"Successfully loaded borrower: {row['name']}! Page unlocked.")
+                    st.rerun()
+    except Exception as e:
+        st.error(f"Error loading database: {e}")
+        
+    st.info("Or, go to the onboarding page to create a new profile:")
     if st.button("Go to Onboarding"):
-        st.switch_page("pages/borrower.py")
+        st.switch_page("pages/1_borrower.py")
     st.stop()
 
 borrower = st.session_state["borrower"]
@@ -110,6 +141,6 @@ st.write("---")
 
 if "summary" in st.session_state:
     if st.button("➡️ View Credit Memo / Report"):
-        st.switch_page("pages/credit_report.py")
+        st.switch_page("pages/3_credit_report.py")
 
 render_loan_form()

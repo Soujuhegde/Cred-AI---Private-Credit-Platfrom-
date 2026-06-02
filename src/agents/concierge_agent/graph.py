@@ -99,20 +99,30 @@ async def node_generate_report(state: WorkflowState) -> dict:
     intel = state["intelligence"]
     borrower = state["borrower"]
     loan = state["loan"]
+    
+    clean_purpose = str(loan.purpose).replace("_", " ")
+    clean_employment = str(borrower.employment_status).replace("_", " ")
+    
+    prompt = f"""You are a helpful senior credit committee analyst. Write an encouraging, highly readable 3-paragraph credit memo in plain English based on the following data.
+    
+IMPORTANT: The borrower and everyday branch employees will read this. You MUST explain any financial acronyms or terms simply so anyone can understand them (for example, explain 'LTV / Loan-to-Value' as 'how much you are borrowing compared to what your collateral property is worth', and 'DSR / Debt Service Ratio' as 'what percentage of your monthly income is needed to pay back this loan'). Keep the tone supportive, professional, and completely free of complex banking jargon.
 
-    prompt = f"""You are a senior credit committee analyst. Write a professional 3-paragraph 
-credit committee memo based on the following data:
+CRITICAL: Do NOT include literally written label tags, section headers, or prefixes such as "Paragraph 1:", "Paragraph 2:", "Paragraph 3:", or "Credit Memo for...". Simply output the paragraphs directly. This is extremely important to maintain a professional, clean presentation.
 
-BORROWER: {borrower.name}, Income ${borrower.annual_income:,.0f}, Credit Score {borrower.credit_score}
-LOAN: ${loan.loan_amount:,.0f} for {loan.purpose} over {loan.loan_term_months} months
+CRITICAL: ALWAYS use standard spaces between words. Do NOT generate words separated by underscores (for example, write 'working capital' instead of 'working_capital', and 'self employed' instead of 'self_employed'). Every word in your output must be separated by standard spaces. No snake_case or underscores are allowed anywhere in the generated text!
+
+BORROWER: {borrower.name}, Income ${borrower.annual_income:,.0f}, Credit Score {borrower.credit_score}, Employment: {clean_employment}
+LOAN: ${loan.loan_amount:,.0f} for {clean_purpose} over {loan.loan_term_months} months
       LTV: {loan.ltv_ratio or 'N/A'}, DSR: {loan.debt_service_ratio:.1%}
 RISK: Score {intel.risk_score}/100, Default Prob {intel.default_probability:.1%}
 FACTORS: {', '.join(intel.risk_factors) or 'None identified'}
 MARKET: {intel.market_insights}
 RECOMMENDATION: {intel.recommendation}
 
-Write clearly and professionally. Paragraph 1: borrower overview. 
-Paragraph 2: loan structure and risk metrics. Paragraph 3: recommendation with justification."""
+Structure it as follows:
+- Paragraph 1: Clear, jargon-free overview of the borrower (Chirag) and their request.
+- Paragraph 2: Explanation of the loan terms, risk levels, and simple, friendly definitions of the debt service and collateral ratios.
+- Paragraph 3: The decision (Approved, Needs Review, or Declined) explained in warm, supportive, and practical plain-English terms."""
 
     response = _llm.chat.completions.create(
         model=LLM_MODEL,

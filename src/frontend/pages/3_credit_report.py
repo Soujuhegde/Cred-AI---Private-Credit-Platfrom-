@@ -36,7 +36,7 @@ api_key = st.session_state.get("api_key", "secret-internal-key")
 if "summary" not in st.session_state:
     st.info("No credit committee report available. Submit a loan application to evaluate.")
     if st.button("Go to Loan Application"):
-        st.switch_page("pages/loans.py")
+        st.switch_page("pages/2_loans.py")
     st.stop()
 
 summary = st.session_state["summary"]
@@ -47,14 +47,9 @@ final_rec = summary.get("final_recommendation", "REVIEW")
 narrative = summary.get("narrative", "")
 
 # Display Recommendation badge
-rec_html = render_risk_badge(final_rec)
+rec_html = render_risk_badge(final_rec).strip()
 st.markdown(
-    f"""
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom: 20px;">
-        <h3>Recommendation Status:</h3>
-        {rec_html}
-    </div>
-    """,
+    f'<div style="display:flex; align-items:center; gap:12px; margin-bottom: 24px;"><h3 style="margin:0;">Recommendation Status:</h3>{rec_html}</div>',
     unsafe_allow_html=True
 )
 
@@ -79,7 +74,7 @@ with col1:
         f"""
         <div class="review-card">
             <div class="review-title">Memo Overview</div>
-            <p style="white-space: pre-wrap; font-size:15px; color:#ddd; line-height:1.6;">
+            <p style="white-space: pre-wrap; font-size: 15px; color: #1A1816; line-height: 1.6; font-family: 'Inter', sans-serif;">
                 {narrative}
             </p>
         </div>
@@ -89,17 +84,24 @@ with col1:
 
 with col2:
     st.markdown("### 🔍 Risk Factors & Market Insights")
-    st.markdown("**Identified Risk Factors:**")
+    
+    # Structure Risk Factors
     risk_factors = intel.get("risk_factors", [])
+    risk_html = ""
     if risk_factors:
         for factor in risk_factors:
-            st.markdown(f"- ⚠️ {factor}")
+            clean_factor = str(factor).replace("_", " ").title()
+            risk_html += f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; background: rgba(220, 53, 69, 0.08); border-left: 4px solid #DC3545; padding: 10px; border-radius: 4px;"><span style="font-size: 1.1rem; color: #DC3545;">⚠️</span><span style="color: #4A1A1A; font-weight: 500; font-size: 0.95rem;">{clean_factor}</span></div>'
     else:
-        st.markdown("- None identified.")
-        
-    st.markdown("---")
-    st.markdown("**Market Insights:**")
-    st.write(intel.get("market_insights", "No insights available."))
+        risk_html = '<div style="display: flex; align-items: center; gap: 8px; background: rgba(40, 167, 69, 0.08); border-left: 4px solid #28A745; padding: 10px; border-radius: 4px;"><span style="font-size: 1.1rem; color: #28A745;">✅</span><span style="color: #1A3E20; font-weight: 500; font-size: 0.95rem;">No major risk factors flagged. Excellent profile!</span></div>'
+
+    # Structure Market Insights
+    insights_text = intel.get("market_insights", "No insights available.")
+    insights_html = f'<div style="background: #FAF6F0; border: 1px solid #D5C8B8; border-radius: 8px; padding: 16px; margin-top: 16px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);"><div style="color: #5C3E21; font-weight: 700; margin-bottom: 8px; font-size: 1rem; display: flex; align-items: center; gap: 6px;">💡 Market Insights</div><p style="color: #2D2A26; font-size: 0.95rem; line-height: 1.6; margin: 0; white-space: pre-wrap;">{insights_text}</p></div>'
+
+    outer_html = f'<div class="review-card" style="background: #FAF3E6 !important; border: 1px solid #C4B5A5 !important; padding: 20px;"><div class="review-title" style="border-bottom: 1px solid #C4B5A5 !important; margin-bottom: 16px;">Risk & Market Analysis</div><div style="margin-bottom: 16px;"><div style="font-weight: 700; color: #5C3E21; margin-bottom: 8px; font-size: 0.85rem; letter-spacing: 0.5px;">IDENTIFIED RISK FACTORS</div>{risk_html}</div>{insights_html}</div>'
+
+    st.markdown(outer_html, unsafe_allow_html=True)
 
 st.write("---")
 

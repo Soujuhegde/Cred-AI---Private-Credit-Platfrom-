@@ -73,11 +73,11 @@ async def generate_intelligence(
         risk_score, default_prob, risk_factors = _compute_risk_score(borrower, loan)
 
         # Generate market insights via LLM
-        prompt = f"""You are a credit analyst. Provide a concise market insight (2-3 sentences) for:
+        prompt = f"""You are a credit analyst. Provide a concise, easy-to-understand market insight (2-3 sentences) in plain English for:
 - Borrower: {borrower.employment_status} at {borrower.company_name or 'N/A'}, credit score {borrower.credit_score}
 - Loan: ${loan.loan_amount:,.0f} for {loan.purpose} over {loan.loan_term_months} months
 - Risk score: {risk_score}/100, default probability: {default_prob:.1%}
-Focus on sector conditions and macro risks relevant to this loan purpose."""
+Avoid heavy banking or industrial jargon. Write simply and clearly so any ordinary person or business owner can understand it."""
 
         response = _llm.chat.completions.create(
             model=LLM_MODEL,

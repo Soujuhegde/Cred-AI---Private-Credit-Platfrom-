@@ -228,6 +228,42 @@ def inject_css():
             color: inherit !important;
         }
         
+        /* 7. High-Contrast Inline Code Readability Override */
+        code {
+            background-color: #1E1A15 !important; /* Rich deep earthy charcoal background */
+            color: #FAF6F0 !important; /* High-contrast light text */
+            padding: 3px 6px !important; /* Tight padding for inline text */
+            border-radius: 4px !important;
+            font-size: 0.9em !important;
+            border: 1px solid #D5C8B8 !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        
+        /* 8. High-Contrast Block Code & JSON Block Overrides */
+        [data-testid="stJson"], 
+        .stCode, 
+        pre {
+            background-color: #1E1A15 !important;
+            border: 1px solid #D5C8B8 !important;
+            border-radius: 8px !important;
+            padding: 16px !important;
+        }
+        
+        [data-testid="stJson"] *, 
+        .stCode *, 
+        pre * {
+            color: #FAF6F0 !important;
+        }
+        
+        /* Reset inline styling for code tags inside block tags */
+        pre code {
+            padding: 0 !important;
+            border: none !important;
+            background-color: transparent !important;
+            display: inline !important;
+        }
+        
         </style>
         """,
         unsafe_allow_html=True,

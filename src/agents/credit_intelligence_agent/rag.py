@@ -4,9 +4,11 @@ import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from shared.config import CHROMA_PATH
 
+from typing import Any
+
 logger = logging.getLogger(__name__)
 
-_client: chromadb.PersistentClient | None = None
+_client: Any = None
 _collection = None
 
 

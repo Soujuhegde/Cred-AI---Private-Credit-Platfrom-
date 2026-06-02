@@ -97,7 +97,38 @@ with col1:
 
 with col2:
     st.markdown("### Retrieve Existing Borrower")
-    search_id = st.text_input("Enter Borrower ID to search:")
+    
+    # Quick-load selectbox from local DB
+    import sqlite3
+    try:
+        conn = sqlite3.connect("borrower.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT borrower_id, name FROM borrowers ORDER BY created_at DESC")
+        existing_borrowers = cursor.fetchall()
+        conn.close()
+        
+        if existing_borrowers:
+            options = ["-- Select a Borrower to Load --"] + [f"{name} ({bid})" for bid, name in existing_borrowers]
+            selected_option = st.selectbox("⚡ Quick Load Onboarded Borrower:", options=options)
+            if selected_option != "-- Select a Borrower to Load --":
+                selected_bid = selected_option.split("(")[-1].replace(")", "").strip()
+                # Fetch details from SQLite
+                conn = sqlite3.connect("borrower.db")
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM borrowers WHERE borrower_id = ?", (selected_bid,))
+                row = cursor.fetchone()
+                conn.close()
+                if row:
+                    borrower_data = dict(row)
+                    st.session_state["borrower"] = borrower_data
+                    st.success(f"Successfully loaded borrower: {borrower_data.get('name')}!")
+                    st.rerun()
+    except Exception as e:
+        st.error(f"Error loading database: {e}")
+
+    st.write("---")
+    search_id = st.text_input("Or, enter Borrower ID to search manually:")
     if st.button("Fetch Borrower Profile"):
         if search_id:
             try:

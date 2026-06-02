@@ -26,6 +26,18 @@ class A2AClient:
             r = await client.get(
                 f"{self.base_url}{path}", headers=self.headers
             )
+            if r.status_code >= 400:
+                try:
+                    data = r.json()
+                    detail = data.get("detail")
+                    if detail:
+                        if isinstance(detail, list):
+                            messages = [f"{item.get('msg')}" for item in detail]
+                            raise ValueError(", ".join(messages))
+                        raise ValueError(str(detail))
+                except Exception as ex:
+                    if isinstance(ex, ValueError):
+                        raise ex
             r.raise_for_status()
             return r.json()
 
@@ -34,6 +46,18 @@ class A2AClient:
             r = await client.post(
                 f"{self.base_url}{path}", json=payload, headers=self.headers
             )
+            if r.status_code >= 400:
+                try:
+                    data = r.json()
+                    detail = data.get("detail")
+                    if detail:
+                        if isinstance(detail, list):
+                            messages = [f"{item.get('msg')}" for item in detail]
+                            raise ValueError(", ".join(messages))
+                        raise ValueError(str(detail))
+                except Exception as ex:
+                    if isinstance(ex, ValueError):
+                        raise ex
             r.raise_for_status()
             return r.json()
 
