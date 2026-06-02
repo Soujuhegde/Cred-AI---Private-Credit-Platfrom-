@@ -77,7 +77,7 @@ with col1:
                     )
                     
                     if res.status_code == 200:
-                        borrower_data = res.json()
+                        borrower_data = res.json() or {}
                         st.session_state["borrower"] = borrower_data
                         st.success(f"Borrower onboarded successfully! Borrower ID: {borrower_data.get('borrower_id')}")
                         st.json(borrower_data)
@@ -120,7 +120,7 @@ with col2:
                 row = cursor.fetchone()
                 conn.close()
                 if row:
-                    borrower_data = dict(row)
+                    borrower_data = dict(row) or {}
                     st.session_state["borrower"] = borrower_data
                     st.success(f"Successfully loaded borrower: {borrower_data.get('name')}!")
                     st.rerun()
@@ -137,7 +137,7 @@ with col2:
                     headers={"X-API-Key": api_key}
                 )
                 if res.status_code == 200:
-                    borrower_data = res.json()
+                    borrower_data = res.json() or {}
                     st.session_state["borrower"] = borrower_data
                     st.success("Borrower found and loaded.")
                     st.json(borrower_data)

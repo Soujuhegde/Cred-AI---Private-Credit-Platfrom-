@@ -34,7 +34,7 @@ backend_url = st.session_state.get("backend_url", "http://localhost:8000")
 api_key = st.session_state.get("api_key", "secret-internal-key")
 
 # Verify borrower profile is loaded
-if "borrower" not in st.session_state:
+if "borrower" not in st.session_state or st.session_state["borrower"] is None:
     st.warning("⚠️ No active borrower profile loaded in this session.")
     
     # Quick-load selectbox from local DB
@@ -71,7 +71,7 @@ if "borrower" not in st.session_state:
         st.switch_page("pages/1_borrower.py")
     st.stop()
 
-borrower = st.session_state["borrower"]
+borrower = st.session_state.get("borrower") or {}
 
 st.info(f"Loaded Borrower: **{borrower.get('name')}** (ID: `{borrower.get('borrower_id')}`)")
 
@@ -136,7 +136,7 @@ with st.form("loan_structuring_form"):
                     st.success("Evaluation complete! Credit Committee report generated.")
                     
                     # Display Visual Risk Envelope Maps
-                    loan_info = response_data.get("loan", {})
+                    loan_info = response_data.get("loan") or {}
                     ltv = loan_info.get("ltv_ratio")
                     dsr = loan_info.get("debt_service_ratio")
                     
@@ -196,5 +196,3 @@ st.write("---")
 if "summary" in st.session_state:
     if st.button("➡️ View Credit Memo / Report"):
         st.switch_page("pages/3_credit_report.py")
-
-render_loan_form()

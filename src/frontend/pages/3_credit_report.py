@@ -33,16 +33,16 @@ backend_url = st.session_state.get("backend_url", "http://localhost:8000")
 api_key = st.session_state.get("api_key", "secret-internal-key")
 
 # Check if summary is available
-if "summary" not in st.session_state:
+summary = st.session_state.get("summary") or {}
+if not summary:
     st.info("No credit committee report available. Submit a loan application to evaluate.")
     if st.button("Go to Loan Application"):
         st.switch_page("pages/2_loans.py")
     st.stop()
 
-summary = st.session_state["summary"]
-borrower = summary.get("borrower", {})
-loan = summary.get("loan", {})
-intel = summary.get("intelligence", {})
+borrower = summary.get("borrower") or {}
+loan = summary.get("loan") or {}
+intel = summary.get("intelligence") or {}
 final_rec = summary.get("final_recommendation", "REVIEW")
 narrative = summary.get("narrative", "")
 
@@ -55,11 +55,11 @@ st.markdown(
 
 # Structure metrics row
 metrics = [
-    {"label": "Loan Amount", "value": f"${loan.get('loan_amount', 0.0):,.0f}"},
-    {"label": "Term (Months)", "value": str(loan.get("loan_term_months", 0))},
-    {"label": "Debt Service Ratio", "value": f"{loan.get('debt_service_ratio', 0.0) * 100:.1f}%"},
-    {"label": "Risk Score", "value": f"{intel.get('risk_score', 0.0):.1f}/100"},
-    {"label": "Default Probability", "value": f"{intel.get('default_probability', 0.0) * 100:.1f}%"}
+    {"label": "Loan Amount", "value": f"${(loan.get('loan_amount') or 0.0):,.0f}"},
+    {"label": "Term (Months)", "value": str(loan.get("loan_term_months") or 0)},
+    {"label": "Debt Service Ratio", "value": f"{(loan.get('debt_service_ratio') or 0.0) * 100:.1f}%"},
+    {"label": "Risk Score", "value": f"{(intel.get('risk_score') or 0.0):.1f}/100"},
+    {"label": "Default Probability", "value": f"{(intel.get('default_probability') or 0.0) * 100:.1f}%"}
 ]
 
 render_metric_row(metrics)

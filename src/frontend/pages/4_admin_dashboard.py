@@ -162,11 +162,11 @@ with tab1:
                         <span style="font-size: 0.8rem; color: #666; font-weight: 500;">🕒 {time_formatted}</span>
                     </div>
                     <div style="display: flex; gap: 20px; font-size: 0.85rem; color: #4A4540; font-weight: 600; margin-bottom: 6px;">
-                        <span>👤 Borrower ID: <code style="background:#E5DCD0; padding:2px 6px; border-radius:4px; font-size:0.8rem;">{ev.get('borrower_id')}</code></span>
-                        <span>📄 Loan ID: <code style="background:#E5DCD0; padding:2px 6px; border-radius:4px; font-size:0.8rem;">{ev.get('loan_id')}</code></span>
+                        <span>👤 Borrower ID: <code style="background:#E5DCD0; padding:2px 6px; border-radius:4px; font-size:0.8rem;">{ev.get('borrower_id') or 'N/A'}</code></span>
+                        <span>📄 Loan ID: <code style="background:#E5DCD0; padding:2px 6px; border-radius:4px; font-size:0.8rem;">{ev.get('loan_id') or 'N/A'}</code></span>
                     </div>
                     <p style="color: #2D2A26; font-size: 0.9rem; line-height: 1.5; margin: 0; font-weight: 500;">
-                        📝 {ev.get('message', 'No details provided.')}
+                        📝 {ev.get('message') or 'No details provided.'}
                     </p>
                 </div>
                 """,
