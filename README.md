@@ -8,6 +8,17 @@
 
 CredAI is a decentralized, multi-agent credit evaluation and loan origination platform designed specifically for private credit markets. By leveraging **FastAPI** microservices, **LangGraph** workflow orchestration, and **Sarvam AI** reasoning models, the system federates borrower onboarding, loan term structuring, risk ratio validation, and semantic search retrieval-augmented generation (RAG) into a secure, modular, and accessible platform.
 
+---
+
+## 📸 Dashboard Preview
+
+<p align="center">
+  <img src="docs/assets/dashboard_home.png" alt="CredAI Dashboard Screenshot" width="900"/>
+</p>
+
+<p align="center"><em>CredAI — Streamlit-powered multi-agent private credit dashboard with RAG query panel</em></p>
+
+---
 
 ## 🏗️ Architecture & Orchestration
 
