@@ -8,7 +8,6 @@
 
 CredAI is a decentralized, multi-agent credit evaluation and loan origination platform designed specifically for private credit markets. By leveraging **FastAPI** microservices, **LangGraph** workflow orchestration, and **Sarvam AI** reasoning models, the system federates borrower onboarding, loan term structuring, risk ratio validation, and semantic search retrieval-augmented generation (RAG) into a secure, modular, and accessible platform.
 
----
 
 ## 🏗️ Architecture & Orchestration
 
@@ -45,8 +44,6 @@ graph TD
 4. **Loan Agent (Port 8002)**: Structures loan terms and calculates credit metrics like Debt-Service Ratio (DSR) and Loan-to-Value (LTV). Enforces strict safety envelopes.
 5. **Credit Intelligence Agent (Port 8003)**: Computes risk scoring (0-100) and default probabilities. Uses Sarvam AI's reasoning model to generate localized sector insights, maintains SQL audit event logs, and indexes summaries into a persistent **ChromaDB** store using offline embeddings (`all-MiniLM-L6-v2`) for semantic querying.
 
----
-
 ## ✨ Key Features & Business Rules
 
 ### ⚙️ Strict Private Credit Validation Envelopes
@@ -64,7 +61,6 @@ If you refresh the browser page or clear the session state, you **never** have t
 ### 📝 Plain-English Credit Committee Memos
 To ensure credit decisions are transparent to borrowers and branch staff alike, the AI avoids heavy banking jargon and explicitly explains financial acronyms (like DSR and LTV) in supportive, friendly, and practical plain English.
 
----
 
 ## 🚀 Getting Started
 
@@ -120,8 +116,6 @@ CHROMA_PATH=./chroma_db
 LOG_LEVEL=INFO
 ```
 
----
-
 ## 🏃 Usage & Run Guide
 
 To run the entire federated agent stack locally, open **five separate terminal windows** (ensure the `.venv` virtual environment is activated in each) and launch the components in the following order:
@@ -152,8 +146,6 @@ To run the entire federated agent stack locally, open **five separate terminal w
   streamlit run src/frontend/app.py
   ```
 The dashboard will open automatically in your browser at `http://localhost:8501`.
-
----
 
 ## 📖 Step-by-Step Walkthrough Example
 
@@ -188,8 +180,6 @@ Follow this quick guide to run a complete evaluation cycle:
    * **Risk & Market Analysis:** Banners displaying identified risk factors (e.g. manufacturing sector cost headwinds) and RAG-retrieved market insights.
    * **Interactive RAG Query Panel:** Allows bank staff to search the database semantically. Try querying: `"Manufacturing sector risk profiles with good collateral"`.
 
----
-
 ## ⚡ API / Endpoints List
 
 ### 🏨 1. Concierge Agent (Orchestrator - Port 8000)
@@ -209,7 +199,6 @@ Follow this quick guide to run a complete evaluation cycle:
 * `POST /intelligence` - Computes risk scores and default probabilities, generates sector insights, and indexes records in ChromaDB.
 * `GET /intelligence/query?q=<query>` - Queries the ChromaDB vector store.
 
----
 
 ## 🧪 Development, Testing & Code Style
 
@@ -241,7 +230,6 @@ Automated test suites are managed via `pytest`.
 
 *Note: If live integration tests are written in the future, they can be selected using the `@pytest.mark.integration` marker.*
 
----
 
 ## 🛠️ Troubleshooting & FAQ
 
@@ -267,8 +255,6 @@ Then rerun the activation command.
 }
 ```
 
----
-
 ## 📈 Roadmap & Phased Enhancement Plan
 
 * [x] **Phase 1: Local Development & Windows Compatibility** (Complete)
@@ -283,12 +269,7 @@ Then rerun the activation command.
   * Stabilize `docker-compose.yml` configs.
   * Switch databases from development SQLite to production-ready PostgreSQL (`psycopg2-binary`).
   * Implement persistent volume mapping for ChromaDB indexing.
-* [ ] **Phase 4: Multi-lingual Credit Analysis**
-  * Support localized report translation in multiple Indian languages (Hindi, Kannada, Telugu, Tamil).
 
----
-
-## 📄 License & Contributing
 
 ### Contributing Guidelines
 1. Fork the project repository and create your feature branch (`git checkout -b feature/AmazingFeature`).
@@ -298,11 +279,6 @@ Then rerun the activation command.
 
 ### Code of Conduct
 Please be polite, collaborative, and inclusive. Refer to standard professional developer codes of conduct.
-
-### Licensing
-Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
-
----
 
 ## 👥 Authors & Contact
 * **Soujanya S P** - Lead System Architect & Orchestration Engineer (`spsoujanya02@gmail.com`)
