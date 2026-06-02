@@ -15,8 +15,8 @@ def validate_borrower(
     if not email:
         errors.append("Email is required")
 
-    if income <= 0:
-        errors.append("Income must be greater than 0")
+    if income < 50000:
+        errors.append("Annual income must be at least $50,000")
 
     return errors
 
@@ -28,10 +28,13 @@ def validate_loan(
 
     errors = []
 
-    if amount <= 0:
-        errors.append("Loan amount required")
+    if amount < 100000:
+        errors.append("Minimum loan amount is $100,000")
 
-    if term <= 0:
-        errors.append("Invalid loan term")
+    if amount > 50000000:
+        errors.append("Maximum loan amount is $50,000,000")
+
+    if term < 3 or term > 360:
+        errors.append("Loan term must be between 3 and 360 months")
 
     return errors

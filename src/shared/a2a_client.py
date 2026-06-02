@@ -36,8 +36,9 @@ class A2AClient:
                             raise ValueError(", ".join(messages))
                         raise ValueError(str(detail))
                 except Exception as ex:
-                    if isinstance(ex, ValueError):
+                    if type(ex) is ValueError:
                         raise ex
+                raise ValueError(f"Agent returned server error (status {r.status_code})")
             r.raise_for_status()
             return r.json()
 
@@ -56,8 +57,9 @@ class A2AClient:
                             raise ValueError(", ".join(messages))
                         raise ValueError(str(detail))
                 except Exception as ex:
-                    if isinstance(ex, ValueError):
+                    if type(ex) is ValueError:
                         raise ex
+                raise ValueError(f"Agent returned server error (status {r.status_code})")
             r.raise_for_status()
             return r.json()
 

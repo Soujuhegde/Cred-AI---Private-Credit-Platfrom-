@@ -37,11 +37,20 @@ def query_rag(
 
     try:
 
-        response = requests.post(
+        response = requests.get(
             f"{base_url}/query",
-            json={"query": query},
+            params={"q": query},
             headers={"X-API-Key": api_key}
         )
+
+        if response.status_code != 200:
+            try:
+                err_detail = response.json().get("detail")
+                if err_detail:
+                    return {"error": err_detail}
+            except:
+                pass
+            return {"error": f"Server error (status {response.status_code})"}
 
         return response.json()
 

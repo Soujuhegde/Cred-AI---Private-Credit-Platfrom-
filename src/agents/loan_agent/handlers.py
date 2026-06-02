@@ -26,7 +26,7 @@ def structure_loan(data: LoanApplicationCreate, annual_income: float, db: Sessio
     if data.collateral_value and data.collateral_value > 0:
         ltv_ratio = data.loan_amount / data.collateral_value
         if ltv_ratio > MAX_LTV:
-            raise ValueError(f"LTV ratio {ltv_ratio:.1%} exceeds maximum {MAX_LTV:.1%}")
+            logger.warning(f"LTV ratio {ltv_ratio:.1%} exceeds maximum {MAX_LTV:.1%}")
 
     # Compute monthly debt-service ratio
     monthly_payment = (
@@ -36,7 +36,7 @@ def structure_loan(data: LoanApplicationCreate, annual_income: float, db: Sessio
     )
     dsr = (monthly_payment * 12) / annual_income
     if dsr > MAX_DSR:
-        raise ValueError(f"Debt service ratio {dsr:.1%} exceeds maximum {MAX_DSR:.1%}")
+        logger.warning(f"Debt service ratio {dsr:.1%} exceeds maximum {MAX_DSR:.1%}")
 
     loan_id = f"LN-{uuid.uuid4().hex[:8].upper()}"
     record = LoanRecord(

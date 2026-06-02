@@ -158,37 +158,35 @@ with st.form("loan_structuring_form"):
                             dsr_color = "#DC3545" # Danger Red
                             dsr_desc = "❌ High debt coverage warning (Payments exceed the maximum 45% DSR limit)."
                             
-                        st.markdown(f"""
-                        <div style="background: #FAF3E6; border: 1px solid #C4B5A5; border-radius: 12px; padding: 20px; margin-top: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); font-family: 'Inter', sans-serif;">
-                            <h4 style="color: #5C3E21; margin-top: 0; border-bottom: 1px solid #C4B5A5; padding-bottom: 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
-                                📊 Real-time Risk Envelope Maps
-                            </h4>
-                            
-                            <!-- LTV Progress Bar -->
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #1A1816;">
-                                    <span>Loan-to-Value (LTV) Ratio</span>
-                                    <span style="color: {ltv_color};">{ltv_pct:.1f}% / 75.0% Max</span>
-                                </div>
-                                <div style="background: #E5DCD0; border-radius: 6px; height: 12px; width: 100%; margin-top: 8px; overflow: hidden; border: 1px solid #C4B5A5;">
-                                    <div style="background: {ltv_color}; height: 100%; width: {min(ltv_pct, 100.0)}%;"></div>
-                                </div>
-                                <div style="font-size: 0.85rem; color: #555; margin-top: 6px;">{ltv_desc}</div>
-                            </div>
-                            
-                            <!-- DSR Progress Bar -->
-                            <div>
-                                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #1A1816;">
-                                    <span>Debt-Service Ratio (DSR)</span>
-                                    <span style="color: {dsr_color};">{dsr_pct:.1f}% / 45.0% Max</span>
-                                </div>
-                                <div style="background: #E5DCD0; border-radius: 6px; height: 12px; width: 100%; margin-top: 8px; overflow: hidden; border: 1px solid #C4B5A5;">
-                                    <div style="background: {dsr_color}; height: 100%; width: {min(dsr_pct, 100.0)}%;"></div>
-                                </div>
-                                <div style="font-size: 0.85rem; color: #555; margin-top: 6px;">{dsr_desc}</div>
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown(f"""<div style="background: #FAF3E6; border: 1px solid #C4B5A5; border-radius: 12px; padding: 20px; margin-top: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); font-family: 'Inter', sans-serif;">
+<h4 style="color: #5C3E21; margin-top: 0; border-bottom: 1px solid #C4B5A5; padding-bottom: 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+    📊 Real-time Risk Envelope Maps
+</h4>
+
+<!-- LTV Progress Bar -->
+<div style="margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #1A1816;">
+        <span>Loan-to-Value (LTV) Ratio</span>
+        <span style="color: {ltv_color};">{ltv_pct:.1f}% / 75.0% Max</span>
+    </div>
+    <div style="background: #E5DCD0; border-radius: 6px; height: 12px; width: 100%; margin-top: 8px; overflow: hidden; border: 1px solid #C4B5A5;">
+        <div style="background: {ltv_color}; height: 100%; width: {min(ltv_pct, 100.0)}%;"></div>
+    </div>
+    <div style="font-size: 0.85rem; color: #555; margin-top: 6px;">{ltv_desc}</div>
+</div>
+
+<!-- DSR Progress Bar -->
+<div>
+    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: #1A1816;">
+        <span>Debt-Service Ratio (DSR)</span>
+        <span style="color: {dsr_color};">{dsr_pct:.1f}% / 45.0% Max</span>
+    </div>
+    <div style="background: #E5DCD0; border-radius: 6px; height: 12px; width: 100%; margin-top: 8px; overflow: hidden; border: 1px solid #C4B5A5;">
+        <div style="background: {dsr_color}; height: 100%; width: {min(dsr_pct, 100.0)}%;"></div>
+    </div>
+    <div style="font-size: 0.85rem; color: #555; margin-top: 6px;">{dsr_desc}</div>
+</div>
+</div>""", unsafe_allow_html=True)
 
 # Visual helper display (calls user component)
 st.write("---")
